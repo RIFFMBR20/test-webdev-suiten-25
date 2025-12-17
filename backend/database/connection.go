@@ -5,7 +5,6 @@ import (
 	"log"
 	"test-webdev-suiten-25/config"
 
-	// Driver GORM untuk PostgreSQL
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

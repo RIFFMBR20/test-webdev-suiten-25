@@ -20,7 +20,6 @@ func CalcWorkOvertimeByCheckout(checkOut time.Time) WorkOvertime {
 	result := WorkOvertime{WorkDays: 1, OvertimeHours: 0}
 
 	if checkOut.Before(base) {
-		// sebelum 17:00 -> (1+0) sesuai default
 		return result
 	}
 
