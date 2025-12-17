@@ -65,3 +65,23 @@ func UpdateEmployeeFromInputDTO(existing dao.Employee, input dto.EmployeeInputMo
 	existing.RedOvertime = input.RedOvertime
 	return existing
 }
+
+func AttendanceToDTO(a dao.Attendance) dto.AttendanceDTO {
+	out := dto.AttendanceDTO{
+		ID:            a.ID,
+		EmployeeID:    a.EmployeeID,
+		Date:          a.Date,
+		TotalOvertime: a.TotalOvertime,
+		Note:          a.Note,
+	}
+
+	if a.HomeTime != nil {
+		out.HomeTime = a.HomeTime.Format("15:04")
+	}
+
+	out.EmployeeName = a.Employee.Name
+	out.DivisionID = a.Employee.DivisionID
+	out.DivisionName = a.Employee.Division.Name
+
+	return out
+}

@@ -52,6 +52,7 @@ func main() {
 	mux := routes.NewRouter(database.DB)
 
 	log.Printf("Server starting on port %s", port)
+	log.Println("Swagger UI available at http://localhost:8080/swagger/index.html")
 	if err := http.ListenAndServe(port, mux); err != nil {
 		log.Fatalf("failed to start server: %v", err)
 	}

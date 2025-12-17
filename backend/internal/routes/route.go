@@ -33,6 +33,13 @@ func NewRouter(db *gorm.DB) *mux.Router {
 
 	RegisterEmployeeRoutes(router, employeeController)
 
+	// attendance
+	attendanceRepo := repository.ProvideAttendanceRepository(db)
+	attendanceService := service.ProvideAttendanceService(attendanceRepo, logger)
+	attendanceController := controller.ProvideAttendanceController(attendanceService, logger)
+
+	RegisterAttendanceRoutes(router, attendanceController)
+
 	//swagger
 	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 

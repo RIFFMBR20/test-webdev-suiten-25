@@ -34,6 +34,14 @@ func ProvideEmployeeController(
 	}
 }
 
+// GetAll godoc
+// @Summary      List employees
+// @Description  Get all employees
+// @Tags         employees
+// @Produce      json
+// @Success      200  {array}   dto.EmployeeDTO
+// @Failure      500  {object}  util.ErrorResponse
+// @Router       /api/employee [get]
 func (c *employeeControllerImpl) GetAll(w http.ResponseWriter, r *http.Request) {
 	data, err := c.service.GetAll()
 	if err != nil {
@@ -45,6 +53,16 @@ func (c *employeeControllerImpl) GetAll(w http.ResponseWriter, r *http.Request) 
 	util.JSON(w, http.StatusOK, data)
 }
 
+// GetByID godoc
+// @Summary      Get employee by ID
+// @Description  Get an employee by its ID
+// @Tags         employees
+// @Produce      json
+// @Param        id   path      int  true  "Employee ID"
+// @Success      200  {object}  dto.EmployeeDTO
+// @Failure      400  {object}  util.ErrorResponse
+// @Failure      404  {object}  util.ErrorResponse
+// @Router       /api/employee/{id} [get]
 func (c *employeeControllerImpl) GetByID(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/employee/")
 	id, err := strconv.Atoi(idStr)
@@ -62,6 +80,17 @@ func (c *employeeControllerImpl) GetByID(w http.ResponseWriter, r *http.Request)
 	util.JSON(w, http.StatusOK, data)
 }
 
+// Create godoc
+// @Summary      Create employee
+// @Description  Create a new employee
+// @Tags         employees
+// @Accept       json
+// @Produce      json
+// @Param        request  body      dto.EmployeeInputModifyDTO  true  "Create employee payload"
+// @Success      201      {object}  dto.EmployeeDTO
+// @Failure      400      {object}  util.ErrorResponse
+// @Failure      404      {object}  util.ErrorResponse
+// @Router       /api/employee [post]
 func (c *employeeControllerImpl) Create(w http.ResponseWriter, r *http.Request) {
 	var employeeDTO dto.EmployeeInputModifyDTO
 
@@ -86,6 +115,18 @@ func (c *employeeControllerImpl) Create(w http.ResponseWriter, r *http.Request) 
 	util.JSON(w, http.StatusCreated, data)
 }
 
+// Update godoc
+// @Summary      Update employee
+// @Description  Update an employee by ID
+// @Tags         employees
+// @Accept       json
+// @Produce      json
+// @Param        id       path      int                       true  "Employee ID"
+// @Param        request  body      dto.EmployeeInputModifyDTO  true  "Update employee payload"
+// @Success      200      {object}  dto.EmployeeDTO
+// @Failure      400      {object}  util.ErrorResponse
+// @Failure      404      {object}  util.ErrorResponse
+// @Router       /api/employee/{id} [put]
 func (c *employeeControllerImpl) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/employees/")
 	id, err := strconv.Atoi(idStr)
@@ -119,6 +160,15 @@ func (c *employeeControllerImpl) Update(w http.ResponseWriter, r *http.Request) 
 	util.JSON(w, http.StatusOK, data)
 }
 
+// Delete godoc
+// @Summary      Delete employee
+// @Description  Delete an employee by ID
+// @Tags         employees
+// @Param        id   path  int  true  "Employee ID"
+// @Success      204  "No Content"
+// @Failure      400  {object}  util.ErrorResponse
+// @Failure      404  {object}  util.ErrorResponse
+// @Router       /api/employee/{id} [delete]
 func (c *employeeControllerImpl) Delete(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/employees/")
 	id, err := strconv.Atoi(idStr)

@@ -1,5 +1,49 @@
 basePath: /
 definitions:
+  controller.BulkUpsertResponse:
+    properties:
+      updated:
+        type: integer
+    type: object
+  dto.AttendanceDTO:
+    properties:
+      date:
+        type: string
+      division_id:
+        type: integer
+      division_name:
+        type: string
+      employee_id:
+        type: integer
+      employee_name:
+        type: string
+      home_time:
+        type: string
+      id:
+        type: integer
+      note:
+        type: string
+      total_overtime:
+        type: string
+    type: object
+  dto.AttendanceUpsertDTO:
+    properties:
+      date:
+        type: string
+      employee_id:
+        type: integer
+      home_time:
+        type: string
+      note:
+        type: string
+    type: object
+  dto.BulkAttendanceUpsertDTO:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.AttendanceUpsertDTO'
+        type: array
+    type: object
   dto.DivisionDTO:
     properties:
       id:
@@ -8,6 +52,70 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  dto.EmployeeDTO:
+    properties:
+      account_number:
+        type: string
+      bank_name:
+        type: string
+      daily_salary:
+        type: integer
+      division:
+        $ref: '#/definitions/dto.DivisionDTO'
+      id:
+        type: integer
+      meal_allowance:
+        type: integer
+      name:
+        type: string
+      overtime:
+        type: integer
+      period_salary:
+        type: string
+      phone_number:
+        type: string
+      red_meal_allowance:
+        type: integer
+      red_overtime:
+        type: integer
+      salary:
+        type: integer
+      shift:
+        type: string
+    type: object
+  dto.EmployeeInputModifyDTO:
+    properties:
+      account_number:
+        type: string
+      bank_name:
+        type: string
+      daily_salary:
+        type: integer
+      division_id:
+        type: integer
+      meal_allowance:
+        type: integer
+      name:
+        type: string
+      overtime:
+        type: integer
+      period_salary:
+        type: string
+      phone_number:
+        type: string
+      red_meal_allowance:
+        type: integer
+      red_overtime:
+        type: integer
+      salary:
+        type: integer
+      shift:
+        type: string
+    required:
+    - division_id
+    - name
+    - salary
     type: object
   util.ErrorResponse:
     properties:
@@ -21,6 +129,73 @@ info:
   title: Test Webdev Suiten API
   version: "1.0"
 paths:
+  /api/attendance:
+    get:
+      description: Get attendance list filtered by date (YYYY-MM-DD) and division_id
+      parameters:
+      - description: Date (YYYY-MM-DD)
+        example: "2025-10-03"
+        in: query
+        name: date
+        required: true
+        type: string
+      - description: Division ID
+        example: 1
+        in: query
+        name: division_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.AttendanceDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: List attendance by date and division
+      tags:
+      - attendance
+  /api/attendance/bulk:
+    post:
+      consumes:
+      - application/json
+      description: Save multiple attendance rows at once (create or update by employee_id
+        + date)
+      parameters:
+      - description: Bulk attendance payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.BulkAttendanceUpsertDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.BulkUpsertResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Bulk upsert attendance
+      tags:
+      - attendance
   /api/divisions:
     get:
       description: Get all divisions
@@ -148,6 +323,137 @@ paths:
       summary: Update division
       tags:
       - divisions
+  /api/employee:
+    get:
+      description: Get all employees
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.EmployeeDTO'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: List employees
+      tags:
+      - employees
+    post:
+      consumes:
+      - application/json
+      description: Create a new employee
+      parameters:
+      - description: Create employee payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.EmployeeInputModifyDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.EmployeeDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Create employee
+      tags:
+      - employees
+  /api/employee/{id}:
+    delete:
+      description: Delete an employee by ID
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Delete employee
+      tags:
+      - employees
+    get:
+      description: Get an employee by its ID
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.EmployeeDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Get employee by ID
+      tags:
+      - employees
+    put:
+      consumes:
+      - application/json
+      description: Update an employee by ID
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update employee payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.EmployeeInputModifyDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.EmployeeDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Update employee
+      tags:
+      - employees
 securityDefinitions:
   BearerAuth:
     in: header
