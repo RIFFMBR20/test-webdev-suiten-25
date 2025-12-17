@@ -1,0 +1,156 @@
+basePath: /
+definitions:
+  dto.DivisionDTO:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  util.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API documentation
+  title: Test Webdev Suiten API
+  version: "1.0"
+paths:
+  /api/divisions:
+    get:
+      description: Get all divisions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.DivisionDTO'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: List divisions
+      tags:
+      - divisions
+    post:
+      consumes:
+      - application/json
+      description: Create a new division
+      parameters:
+      - description: Create division payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DivisionDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.DivisionDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Create division
+      tags:
+      - divisions
+  /api/divisions/{id}:
+    delete:
+      description: Delete a division by ID
+      parameters:
+      - description: Division ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Delete division
+      tags:
+      - divisions
+    get:
+      description: Get a division by its ID
+      parameters:
+      - description: Division ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DivisionDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Get division by ID
+      tags:
+      - divisions
+    put:
+      consumes:
+      - application/json
+      description: Update a division by ID
+      parameters:
+      - description: Division ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update division payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DivisionDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DivisionDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.ErrorResponse'
+      summary: Update division
+      tags:
+      - divisions
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

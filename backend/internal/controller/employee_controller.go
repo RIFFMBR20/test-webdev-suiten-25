@@ -46,7 +46,7 @@ func (c *employeeControllerImpl) GetAll(w http.ResponseWriter, r *http.Request) 
 }
 
 func (c *employeeControllerImpl) GetByID(w http.ResponseWriter, r *http.Request) {
-	idStr := strings.TrimPrefix(r.URL.Path, "/api/employees/")
+	idStr := strings.TrimPrefix(r.URL.Path, "/api/employee/")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		util.Error(w, http.StatusBadRequest, "invalid id")

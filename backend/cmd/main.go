@@ -11,6 +11,18 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Package main API.
+//
+// @title           Test Webdev Suiten API
+// @version         1.0
+// @description     API documentation
+//
+// @host            localhost:8080
+// @BasePath        /
+//
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, using environment variables")

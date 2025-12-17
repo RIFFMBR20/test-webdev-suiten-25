@@ -7,7 +7,10 @@ import (
 	"test-webdev-suiten-25/internal/repository"
 	"test-webdev-suiten-25/internal/service"
 
+	_ "test-webdev-suiten-25/docs"
+
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"gorm.io/gorm"
 )
 
@@ -24,11 +27,14 @@ func NewRouter(db *gorm.DB) *mux.Router {
 	RegisterDivisionRoutes(router, divisionController)
 
 	// employee
-	employeeRepo := repository.ProvideDivisionRepository(db)
-	employeeService := service.ProvideDivisionService(employeeRepo, logger)
-	employeeController := controller.ProvideDivisionController(employeeService, logger)
+	employeeRepo := repository.ProvideEmployeeRepository(db)
+	employeeService := service.ProvideEmployeeService(employeeRepo, divisionRepo, logger)
+	employeeController := controller.ProvideEmployeeController(employeeService, logger)
 
 	RegisterEmployeeRoutes(router, employeeController)
+
+	//swagger
+	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	return router
 }

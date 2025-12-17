@@ -16,3 +16,7 @@ func Error(w http.ResponseWriter, status int, msg string) {
 		"error": msg,
 	})
 }
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}

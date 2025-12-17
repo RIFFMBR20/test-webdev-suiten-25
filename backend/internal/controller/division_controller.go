@@ -33,6 +33,14 @@ func ProvideDivisionController(
 	}
 }
 
+// GetAll godoc
+// @Summary      List divisions
+// @Description  Get all divisions
+// @Tags         divisions
+// @Produce      json
+// @Success      200  {array}   dto.DivisionDTO
+// @Failure      500  {object}  util.ErrorResponse
+// @Router       /api/divisions [get]
 func (c *divisionControllerImpl) GetAll(w http.ResponseWriter, r *http.Request) {
 	data, err := c.service.GetAll()
 	if err != nil {
@@ -44,6 +52,16 @@ func (c *divisionControllerImpl) GetAll(w http.ResponseWriter, r *http.Request) 
 	util.JSON(w, http.StatusOK, data)
 }
 
+// GetByID godoc
+// @Summary      Get division by ID
+// @Description  Get a division by its ID
+// @Tags         divisions
+// @Produce      json
+// @Param        id   path      int  true  "Division ID"
+// @Success      200  {object}  dto.DivisionDTO
+// @Failure      400  {object}  util.ErrorResponse
+// @Failure      404  {object}  util.ErrorResponse
+// @Router       /api/divisions/{id} [get]
 func (c *divisionControllerImpl) GetByID(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/divisions/")
 	id, err := strconv.Atoi(idStr)
@@ -61,6 +79,16 @@ func (c *divisionControllerImpl) GetByID(w http.ResponseWriter, r *http.Request)
 	util.JSON(w, http.StatusOK, data)
 }
 
+// Create godoc
+// @Summary      Create division
+// @Description  Create a new division
+// @Tags         divisions
+// @Accept       json
+// @Produce      json
+// @Param        request  body      dto.DivisionDTO  true  "Create division payload"
+// @Success      201      {object}  dto.DivisionDTO
+// @Failure      400      {object}  util.ErrorResponse
+// @Router       /api/divisions [post]
 func (c *divisionControllerImpl) Create(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Name string `json:"name"`
@@ -80,6 +108,18 @@ func (c *divisionControllerImpl) Create(w http.ResponseWriter, r *http.Request) 
 	util.JSON(w, http.StatusCreated, data)
 }
 
+// Update godoc
+// @Summary      Update division
+// @Description  Update a division by ID
+// @Tags         divisions
+// @Accept       json
+// @Produce      json
+// @Param        id       path      int             true  "Division ID"
+// @Param        request  body      dto.DivisionDTO  true  "Update division payload"
+// @Success      200      {object}  dto.DivisionDTO
+// @Failure      400      {object}  util.ErrorResponse
+// @Failure      404      {object}  util.ErrorResponse
+// @Router       /api/divisions/{id} [put]
 func (c *divisionControllerImpl) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/divisions/")
 	id, err := strconv.Atoi(idStr)
@@ -106,6 +146,15 @@ func (c *divisionControllerImpl) Update(w http.ResponseWriter, r *http.Request) 
 	util.JSON(w, http.StatusOK, data)
 }
 
+// Delete godoc
+// @Summary      Delete division
+// @Description  Delete a division by ID
+// @Tags         divisions
+// @Param        id   path  int  true  "Division ID"
+// @Success      204  "No Content"
+// @Failure      400  {object}  util.ErrorResponse
+// @Failure      404  {object}  util.ErrorResponse
+// @Router       /api/divisions/{id} [delete]
 func (c *divisionControllerImpl) Delete(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/divisions/")
 	id, err := strconv.Atoi(idStr)
